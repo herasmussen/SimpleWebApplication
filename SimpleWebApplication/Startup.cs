@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,22 @@ namespace SimpleWebApplication
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddIdentityCore<MyUser>();
+            services.AddScoped<IUserStore<MyUser>, MyUserStore>();
+            services.AddScoped<ISecurityStampValidator, MyUserStore>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            }).AddIdentityCookies();
+
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/home/login";
+                config.ReturnUrlParameter = "returnTo";
+                //config.Cookie.Name = "ac";
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -48,12 +65,14 @@ namespace SimpleWebApplication
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+        {
+            routes.MapRoute(
+                name: "default",
+                template: "{controller=Home}/{action=Index}/{id?}");
+        });
         }
     }
 }
