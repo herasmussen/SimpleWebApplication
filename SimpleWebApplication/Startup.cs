@@ -34,14 +34,13 @@ namespace SimpleWebApplication
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             }).AddIdentityCookies();
 
             services.ConfigureApplicationCookie(config =>
             {
                 config.LoginPath = "/home/login";
                 config.ReturnUrlParameter = "returnTo";
-                //config.Cookie.Name = "ac";
+                config.Cookie.Name = "Id";
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

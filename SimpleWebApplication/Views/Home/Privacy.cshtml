@@ -10,12 +10,3 @@
         <dd>@claim.Value</dd>
     }
 </dl>
-
-<hr/>
-
-<ul>
-    @foreach (var claim in this.User.Claims)
-    {
-        <li><strong>@claim.Type</strong>: @claim.Value</li>
-    }
-</ul>

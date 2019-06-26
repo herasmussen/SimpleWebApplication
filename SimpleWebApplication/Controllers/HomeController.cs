@@ -84,7 +84,7 @@ namespace SimpleWebApplication.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
                     identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
 
-                    await this.HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(identity));
+                    await this.HttpContext.SignInAsync(new ClaimsPrincipal(identity));
                     return this.Redirect(returnTo ?? this.Url.Action("Index", "Home"));
                 }
 
